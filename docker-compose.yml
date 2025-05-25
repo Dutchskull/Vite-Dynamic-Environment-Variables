@@ -3,11 +3,11 @@ services:
     build:
       context: app
     environment:
-      # space sperated list of asset directories
-      ASSET_DIRS: /var/www/html
+      # The path too where your app is hosted from
+      ASSET_DIR: /var/www/html
       # prefix for environment variables
-      APP_PREFIX: APP_PREFIX_
+      APP_PREFIX: APP_
       # example
-      APP_PREFIX_HELLO_WORLD: "Hello world from docker compose"
+      APP_HELLO_WORLD: "Hello world from docker compose"
     ports:
       - 80:80

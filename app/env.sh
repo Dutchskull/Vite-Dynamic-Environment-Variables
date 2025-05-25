@@ -12,27 +12,24 @@ set -e
 : "${APP_PREFIX:?APP_PREFIX must be set (e.g. APP_PREFIX='APP_PREFIX_')}"
 
 # Check if ASSET_DIRS is set
-: "${ASSET_DIRS:?Must set ASSET_DIRS to one or more paths (space-delimited)}"
+: "${ASSET_DIR:?Must set ASSET_DIR to one path}"
 
-# Iterate through each directory in ASSET_DIRS
-for dir in $ASSET_DIRS; do
-  # Check if the directory exists
-  if [ ! -d "$dir" ]; then
+# Check if the directory exists
+if [ ! -d "$ASSET_DIR" ]; then
     # If not, display a warning message and skip to the next iteration
-    echo "Warning: directory '$dir' not found, skipping."
+    echo "Warning: directory '$ASSET_DIR' not found, skipping."
     continue
-  fi
+fi
 
-  # Display the current directory being scanned
-  echo "Scanning directory: $dir"
-  
-  # Iterate through each environment variable that starts with APP_PREFIX
-  env | grep "^${APP_PREFIX}" | while IFS='=' read -r key value; do
+# Display the current directory being scanned
+echo "Scanning directory: $ASSET_DIR"
+
+# Iterate through each environment variable that starts with APP_PREFIX
+env | grep "^${APP_PREFIX}" | while IFS='=' read -r key value; do
     # Display the variable being replaced
     echo "  • Replacing ${key} → ${value}"
 
     # Use find and sed to replace the variable in all files within the directory
-    find "$dir" -type f \
-      -exec sed -i "s|${key}|${value}|g" {} +
-  done
+    find "$ASSET_DIR" -type f \
+        -exec sed -i "s|${key}|${value}|g" {} +
 done
